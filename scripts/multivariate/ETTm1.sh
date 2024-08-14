@@ -29,6 +29,7 @@ do
       --seq_len $seq_len \
       --pred_len $pred_len \
       --patch_size_list 16 12 8 4 12 8 6 4 8 6 2 12 \
+      --batch_norm 0 \
       --residual_connection 1\
       --num_nodes 7 \
       --layer_nums 3 \

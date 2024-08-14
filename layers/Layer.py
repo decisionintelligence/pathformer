@@ -9,7 +9,7 @@ from layers.Embedding import *
 
 
 class Transformer_Layer(nn.Module):
-    def __init__(self, device, d_model, d_ff, num_nodes, patch_nums, patch_size, dynamic, factorized, layer_number):
+    def __init__(self, device, d_model, d_ff, num_nodes, patch_nums, patch_size, dynamic, factorized, layer_number, batch_norm):
         super(Transformer_Layer, self).__init__()
         self.device = device
         self.d_model = d_model
@@ -18,6 +18,7 @@ class Transformer_Layer(nn.Module):
         self.patch_nums = patch_nums
         self.patch_size = patch_size
         self.layer_number = layer_number
+        self.batch_norm = batch_norm
 
 
         ##intra_patch_attention
@@ -110,11 +111,13 @@ class Transformer_Layer(nn.Module):
         inter_out = torch.reshape(inter_out, (b, self.patch_size*self.patch_nums, nvar, self.d_model)) #[b, temporal, nvar, dim]
 
         out = new_x + intra_out_concat + inter_out
-        out = self.norm_attn(out.reshape(b*nvar, self.patch_size*self.patch_nums, self.d_model))
+        if self.batch_norm:
+            out = self.norm_attn(out.reshape(b*nvar, self.patch_size*self.patch_nums, self.d_model))
         ##FFN
         out = self.dropout(out)
         out = self.ff(out) + out
-        out = self.norm_ffn(out).reshape(b, self.patch_size*self.patch_nums, nvar, self.d_model)
+        if self.batch_norm:
+            out = self.norm_ffn(out).reshape(b, self.patch_size*self.patch_nums, nvar, self.d_model)
         return out, attention
 
 

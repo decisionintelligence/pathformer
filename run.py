@@ -51,7 +51,8 @@ if __name__ == '__main__':
     parser.add_argument('--embed', type=str, default='timeF',
                         help='time features encoding, options:[timeF, fixed, learned]')
     parser.add_argument('--residual_connection', type=int, default=0)
-    parser.add_argument('--metric',type=str, default='mae')
+    parser.add_argument('--metric', type=str, default='mae')
+    parser.add_argument('--batch_norm', type=int, default=0)
 
 
     # optimization

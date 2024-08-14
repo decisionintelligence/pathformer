@@ -7,7 +7,7 @@ from utils.Other import SparseDispatcher, FourierLayer, series_decomp_multi, MLP
 
 class AMS(nn.Module):
     def __init__(self, input_size, output_size, num_experts, device, num_nodes=1, d_model=32, d_ff=64, dynamic=False,
-                 patch_size=[8, 6, 4, 2], noisy_gating=True, k=4, layer_number=1, residual_connection=1):
+                 patch_size=[8, 6, 4, 2], noisy_gating=True, k=4, layer_number=1, residual_connection=1, batch_norm=False):
         super(AMS, self).__init__()
         self.num_experts = num_experts
         self.output_size = output_size
@@ -24,10 +24,12 @@ class AMS(nn.Module):
             patch_nums = int(input_size / patch)
             self.experts.append(Transformer_Layer(device=device, d_model=d_model, d_ff=d_ff,
                                       dynamic=dynamic, num_nodes=num_nodes, patch_nums=patch_nums,
-                                      patch_size=patch, factorized=True, layer_number=layer_number))
+                                      patch_size=patch, factorized=True, layer_number=layer_number, batch_norm=batch_norm))
 
-        self.w_gate = nn.Parameter(torch.zeros(input_size, num_experts), requires_grad=True)
-        self.w_noise = nn.Parameter(torch.zeros(input_size, num_experts), requires_grad=True)
+        # self.w_gate = nn.Parameter(torch.zeros(input_size, num_experts), requires_grad=True)
+        # self.w_noise = nn.Parameter(torch.zeros(input_size, num_experts), requires_grad=True)
+        self.w_noise = nn.Linear(input_size, num_experts)
+        self.w_gate = nn.Linear(input_size, num_experts)
 
         self.residual_connection = residual_connection
         self.end_MLP = MLP(input_size=input_size, output_size=output_size)
@@ -73,9 +75,11 @@ class AMS(nn.Module):
     def noisy_top_k_gating(self, x, train, noise_epsilon=1e-2):
         x = self.start_linear(x).squeeze(-1)
 
-        clean_logits = x @ self.w_gate
+        # clean_logits = x @ self.w_gate
+        clean_logits = self.w_gate(x)
         if self.noisy_gating and train:
-            raw_noise_stddev = x @ self.w_noise
+            # raw_noise_stddev = x @ self.w_noise
+            raw_noise_stddev = self.w_noise(x)
             noise_stddev = ((self.softplus(raw_noise_stddev) + noise_epsilon))
             noisy_logits = clean_logits + (torch.randn_like(clean_logits) * noise_stddev)
             logits = noisy_logits

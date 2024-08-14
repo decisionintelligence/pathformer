@@ -29,6 +29,7 @@ do
       --patch_size_list 16 12 8 32 12 8 6 4 8 6 4 2 \
       --num_nodes 7 \
       --layer_nums 3 \
+      --batch_norm 0 \
       --residual_connection 0 \
       --k 2 \
       --d_model 4 \
@@ -56,6 +57,7 @@ do
       --patch_size_list 16 12 8 32 12 8 6 4 8 6 4 2 \
       --num_nodes 7 \
       --layer_nums 3 \
+      --batch_norm 0 \
       --residual_connection 0 \
       --k 2 \
       --d_model 8 \
@@ -82,6 +84,7 @@ do
       --patch_size_list 16 12 8 32 12 8 6 4 8 6 4 2 \
       --num_nodes 7 \
       --layer_nums 3 \
+      --batch_norm 0 \
       --residual_connection 0 \
       --k 2 \
       --d_model 4 \
@@ -108,6 +111,7 @@ do
       --patch_size_list 16 12 8 32 12 8 6 32 8 6 16 12 \
       --num_nodes 7 \
       --layer_nums 3 \
+      --batch_norm 0 \
       --residual_connection 0 \
       --k 3 \
       --d_model 16 \

@@ -31,12 +31,13 @@ class Model(nn.Module):
         self.start_fc = nn.Linear(in_features=1, out_features=self.d_model)
         self.AMS_lists = nn.ModuleList()
         self.device = torch.device('cuda:{}'.format(configs.gpu))
+        self.batch_norm = configs.batch_norm
 
         for num in range(self.layer_nums):
             self.AMS_lists.append(
                 AMS(self.seq_len, self.seq_len, self.num_experts_list[num], self.device, k=self.k,
                     num_nodes=self.num_nodes, patch_size=self.patch_size_list[num], noisy_gating=True,
-                    d_model=self.d_model, d_ff=self.d_ff, layer_number=num + 1, residual_connection=self.residual_connection))
+                    d_model=self.d_model, d_ff=self.d_ff, layer_number=num + 1, residual_connection=self.residual_connection, batch_norm=self.batch_norm))
         self.projections = nn.Sequential(
             nn.Linear(self.seq_len * self.d_model, self.pre_len)
         )

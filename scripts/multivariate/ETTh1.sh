@@ -28,6 +28,7 @@ do
       --patch_size_list 16 12 8 32 12 8 6 4 8 6 4 2 \
       --num_nodes 7 \
       --layer_nums 3 \
+      --batch_norm 0 \
       --residual_connection 1\
       --k 3\
       --d_model 4 \
@@ -35,7 +36,6 @@ do
       --train_epochs 30\
       --patience 10\
       --lradj 'TST'\
-      --use_multi_gpu \
       --itr 1 \
       --batch_size 128 --learning_rate 0.0005 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log
 done
@@ -56,6 +56,7 @@ do
       --patch_size_list 16 12 8 32 12 8 6 4 8 6 4 2 \
       --num_nodes 7 \
       --layer_nums 3 \
+      --batch_norm 0 \
       --residual_connection 1\
       --k 3\
       --d_model 4 \
@@ -63,7 +64,6 @@ do
       --train_epochs 30\
       --patience 10\
       --lradj 'TST'\
-      --use_multi_gpu \
       --itr 1 \
       --batch_size 128 --learning_rate 0.0005 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log
 done
@@ -83,6 +83,7 @@ do
       --patch_size_list 16 12 8 32 12 8 6 16 8 6 4 16 \
       --num_nodes 7 \
       --layer_nums 3 \
+      --batch_norm 0 \
       --residual_connection 0\
       --k 3\
       --d_model 4 \
@@ -110,6 +111,7 @@ do
       --patch_size_list 16 12 8 32 12 8 6 4 8 6 4 2 \
       --num_nodes 7 \
       --layer_nums 3 \
+      --batch_norm 0 \
       --residual_connection 0\
       --k 2\
       --d_model 4 \
