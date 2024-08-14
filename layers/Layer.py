@@ -110,9 +110,11 @@ class Transformer_Layer(nn.Module):
         inter_out = torch.reshape(inter_out, (b, self.patch_size*self.patch_nums, nvar, self.d_model)) #[b, temporal, nvar, dim]
 
         out = new_x + intra_out_concat + inter_out
+        out = self.norm_attn(out.reshape(b*nvar, self.patch_size*self.patch_nums, self.d_model))
         ##FFN
         out = self.dropout(out)
         out = self.ff(out) + out
+        out = self.norm_ffn(out).reshape(b, self.patch_size*self.patch_nums, nvar, self.d_model)
         return out, attention
 
 
